@@ -1,65 +1,29 @@
-const addButton12 = document.getElementById("addButton12");
-addButton12.addEventListener("click", () => {
-  handlephone(true);
-});
+function handleProductChange(product, isIncrease) {
+  const productAmount = getInputValue(product);
 
-const minus12 = document.getElementById("minus12");
-minus12.addEventListener("click", () => {
-  handlephone(false);
-});
+  const productPrice = document.getElementById(product + "-total");
+  const current11Price = parseInt(productPrice.innerText);
 
-function handlephone(isIncrease) {
-  const insert12 = document.getElementById("insert12");
-  const insertAmount12 = parseInt(insert12.value);
-
-  const iphone12Price = document.getElementById("iphone12Price");
-  const current12Price = parseInt(iphone12Price.innerText);
-  let total12insert = insertAmount12;
+  let totalProduct = productAmount;
   if (isIncrease == true) {
-    total12insert = insertAmount12 + 1;
+    totalProduct = productAmount + 1;
   }
-  if (isIncrease == false && insertAmount12 > 0) {
-    total12insert = insertAmount12 - 1;
-  }
-
-  document.getElementById("insert12").value = total12insert;
-
-  const total12Price = total12insert * 1219;
-
-  document.getElementById("iphone12Price").innerText = total12Price;
-}
-
-//case section
-const addButton11 = document.getElementById("addButton11");
-addButton11.addEventListener("click", function () {
-  handleProductChange(true);
-});
-
-const minus11 = document.getElementById("minus11");
-minus11.addEventListener("click", () => {
-  handleProductChange(false);
-});
-
-function handleProductChange(isIncrease) {
-  const insert11 = document.getElementById("insert11");
-  const insertAmount11 = parseInt(insert11.value);
-
-  const iphone11Price = document.getElementById("iphone11Price");
-  const current11Price = parseInt(iphone11Price.innerText);
-
-  let total11insert = insertAmount11;
-  if (isIncrease == true) {
-    total11insert = insertAmount11 + 1;
-  }
-  if (isIncrease == false && insertAmount11 > 0) {
-    total11insert = insertAmount11 - 1;
+  if (isIncrease == false && productAmount > 0) {
+    totalProduct = productAmount - 1;
   }
 
-  document.getElementById("insert11").value = total11insert;
+  document.getElementById(product + "-count").value = totalProduct;
 
-  const total11priceMinus = total11insert * 59;
+  let totalProductPrice = 0;
+  if (product == "phone") {
+    totalProductPrice = totalProduct * 1219;
+  }
+  if (product == "case") {
+    totalProductPrice = totalProduct * 59;
+  }
 
-  document.getElementById("iphone11Price").innerText = total11priceMinus;
+  document.getElementById(product + "-total").innerText = totalProductPrice;
+  calculateTotal();
 }
 
 const removeItem = document.getElementById("remove-item");
@@ -73,22 +37,26 @@ removeItem.addEventListener("click", () => {
 removeItem2.addEventListener("click", () => {
   removeCart2.style.display = "none";
 });
-const checkOut = document.getElementById("checkout");
 
-checkOut.addEventListener("click", () => {
-  const iphone12Price = document.getElementById("iphone12Price");
-  const current12Price = parseInt(iphone12Price.innerText);
+function calculateTotal() {
+  const phoneCount = getInputValue("phone");
 
-  const iphone11Price = document.getElementById("iphone11Price");
-  const current11Price = parseInt(iphone11Price.innerText);
+  const caseCount = getInputValue("case");
 
-  const totalprice = current12Price + current11Price;
+  const subtotal = phoneCount * 1219 + caseCount * 59;
 
-  const subtotalAmount = document.getElementById("subtotalAmount");
+  document.getElementById("subtotalAmount").innerText = subtotal;
 
-  document.getElementById("subtotalAmount").innerText = totalprice;
+  const tax = Math.round(subtotal * 0.01);
 
-  const totalPriceAmount = totalprice;
+  document.getElementById("tax-amount").innerText = tax;
 
-  document.getElementById("totalAmount").innerText = totalPriceAmount;
-});
+  const grandTotal = subtotal + tax;
+  document.getElementById("totalAmount").innerText = grandTotal;
+}
+
+function getInputValue(product) {
+  const productInput = document.getElementById(product + "-count");
+  const productCount = parseInt(productInput.value);
+  return productCount;
+}
